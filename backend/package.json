@@ -1,5 +1,15 @@
 {
+  "name": "fittrack-backend",
+  "version": "1.0.0",
+  "description": "API REST para gerenciamento de alunos de academia",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
   "dependencies": {
+    "better-sqlite3": "^12.4.1",
+    "cors": "^2.8.5",
     "express": "^5.1.0"
   }
 }
