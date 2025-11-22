@@ -13,22 +13,19 @@ class Aluno {
   validate() {
     const errors = [];
 
-    // Validação do nome (required)
-    if (!this.nome || this.nome.trim() === '') {
+    if (!this.nome || this.nome.trim() === "") {
       errors.push('O campo "nome" é obrigatório');
     }
 
-    // Validação do IMC (>=10)
     if (this.imc !== undefined && this.imc !== null) {
-      if (typeof this.imc !== 'number' || this.imc < 10) {
+      if (typeof this.imc !== "number" || this.imc < 10) {
         errors.push('O campo "imc" deve ser um número maior ou igual a 10');
       }
     }
 
-    // Validação da frequência semanal (0-7)
     if (this.freqSemanal !== undefined && this.freqSemanal !== null) {
       if (
-        typeof this.freqSemanal !== 'number' ||
+        typeof this.freqSemanal !== "number" ||
         this.freqSemanal < 0 ||
         this.freqSemanal > 7
       ) {
@@ -36,7 +33,6 @@ class Aluno {
       }
     }
 
-    // Validação da data de vencimento
     if (this.vencimento) {
       const date = new Date(this.vencimento);
       if (isNaN(date.getTime())) {
@@ -44,8 +40,7 @@ class Aluno {
       }
     }
 
-    // Validação do campo ativo (boolean)
-    if (this.ativo !== undefined && typeof this.ativo !== 'boolean') {
+    if (this.ativo !== undefined && typeof this.ativo !== "boolean") {
       errors.push('O campo "ativo" deve ser um valor booleano');
     }
 

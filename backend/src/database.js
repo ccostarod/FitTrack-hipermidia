@@ -1,10 +1,9 @@
-const Database = require('better-sqlite3');
-const path = require('path');
+const Database = require("better-sqlite3");
+const path = require("path");
 
-// Criar/conectar ao banco
-const db = new Database(path.join(__dirname, '..', 'fittrack.db'));
+const dbName = process.env.DB_FILENAME || "fittrack.db";
+const db = new Database(path.join(__dirname, "..", dbName));
 
-// Criar tabela se não existir
 db.exec(`
   CREATE TABLE IF NOT EXISTS alunos (
     id TEXT PRIMARY KEY,

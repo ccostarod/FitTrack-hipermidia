@@ -4,8 +4,8 @@
   "description": "API REST para gerenciamento de alunos de academia",
   "main": "src/index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "node --watch src/index.js"
+    "start": "node --env-file=.env src/index.js",
+    "dev": "node --env-file=.env --watch src/index.js"
   },
   "dependencies": {
     "better-sqlite3": "^12.4.1",
