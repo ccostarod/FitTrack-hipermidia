@@ -9,9 +9,11 @@ const form = document.getElementById("form-add-student");
 const studentsList = document.getElementById("students-list");
 const filterPlan = document.getElementById("filter-plan");
 const filterActive = document.getElementById("filter-active");
+const searchInput = document.getElementById("search-input");
 
 let isEditMode = false;
 let currentStudentId = null;
+let allStudents = [];
 
 function openModal() {
   isEditMode = false;
@@ -75,12 +77,26 @@ async function fetchStudents() {
     const response = await fetch(`${API_URL}?${params.toString()}`);
     if (!response.ok) throw new Error("Erro ao buscar alunos");
 
-    const students = await response.json();
-    renderStudents(students);
+    allStudents = await response.json();
+    filterAndRenderStudents();
   } catch (error) {
     console.error("Erro:", error);
     alert("Erro ao carregar lista de alunos");
   }
+}
+
+function filterAndRenderStudents() {
+  const searchTerm = searchInput.value.toLowerCase().trim();
+
+  let filtered = allStudents;
+
+  if (searchTerm) {
+    filtered = filtered.filter(student =>
+      student.nome.toLowerCase().includes(searchTerm)
+    );
+  }
+
+  renderStudents(filtered);
 }
 
 function renderStudents(students) {
@@ -228,5 +244,6 @@ form.addEventListener("submit", (e) => {
 
 filterPlan.addEventListener("change", fetchStudents);
 filterActive.addEventListener("change", fetchStudents);
+searchInput.addEventListener("input", filterAndRenderStudents);
 
 fetchStudents();

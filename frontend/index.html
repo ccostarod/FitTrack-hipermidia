@@ -97,24 +97,31 @@
       </div>
     </div>
 
-    <div class="container filters-section">
-      <div class="filter-group">
-        <label for="filter-plan">Filtrar por Plano:</label>
-        <select id="filter-plan">
-          <option value="">Todos</option>
-          <option value="Mensal">Mensal</option>
-          <option value="Trimestral">Trimestral</option>
-          <option value="Semestral">Semestral</option>
-          <option value="Anual">Anual</option>
-        </select>
+    <div class="container filters-wrapper">
+      <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Buscar aluno por nome..." />
       </div>
-      <div class="filter-group">
-        <label for="filter-active">Status:</label>
-        <select id="filter-active">
-          <option value="">Todos</option>
-          <option value="true">Ativos</option>
-          <option value="false">Inativos</option>
-        </select>
+
+      <div class="filters-section">
+        <div class="filter-group">
+          <label for="filter-plan">Filtrar por Plano:</label>
+          <select id="filter-plan">
+            <option value="">Todos</option>
+            <option value="Mensal">Mensal</option>
+            <option value="Trimestral">Trimestral</option>
+            <option value="Semestral">Semestral</option>
+            <option value="Anual">Anual</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label for="filter-active">Status:</label>
+          <select id="filter-active">
+            <option value="">Todos</option>
+            <option value="true">Ativos</option>
+            <option value="false">Inativos</option>
+          </select>
+        </div>
       </div>
     </div>
 
