@@ -1,52 +1,129 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FitTrack - Gerenciamento de Alunos</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
     <header class="header">
-        <div class="container">
-            <div class="logo">
-                <h1>FitTrack</h1>
-            </div>
-            <nav class="nav">
-                <button class="btn-add-student">Adicionar Aluno</button>
-            </nav>
+      <div class="container">
+        <div class="logo">
+          <h1>FitTrack</h1>
         </div>
+        <nav class="nav">
+          <button class="btn-add-student">Adicionar Aluno</button>
+        </nav>
+      </div>
     </header>
 
     <div id="modal-add-student" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1>Adicionar Novo Aluno</h1>
-                <button class="btn-close-modal">&times;</button>
-            </div>
-
-            <form id="form-add-student" class="modal-form">
-                <div class="form-group">
-                    <label for="student-name">Nome Completo</label>
-                    <input type="text" id="student-name" name="name" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="student-phone">Telefone</label>
-                    <input type="tel" id="student-phone" name="phone" required>
-                </div>
-
-                <div class="form-actions">
-                    <button type="button" class="btn-cancel">Cancelar</button>
-                    <button type="submit" class="btn-submit">Adicionar</button>
-                </div>
-            </form>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1>Adicionar Novo Aluno</h1>
+          <button class="btn-close-modal">&times;</button>
         </div>
+
+        <form id="form-add-student" class="modal-form">
+          <div class="form-group">
+            <label for="student-name">Nome Completo</label>
+            <input type="text" id="student-name" name="name" required />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="student-plan">Plano</label>
+              <select id="student-plan" name="plano" required>
+                <option value="Mensal">Mensal</option>
+                <option value="Trimestral">Trimestral</option>
+                <option value="Semestral">Semestral</option>
+                <option value="Anual">Anual</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="student-objective">Objetivo</label>
+              <input type="text" id="student-objective" name="objetivo" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="student-imc">IMC</label>
+              <input
+                type="number"
+                id="student-imc"
+                name="imc"
+                step="0.1"
+                min="10"
+              />
+            </div>
+            <div class="form-group">
+              <label for="student-freq">Freq. Semanal</label>
+              <input
+                type="number"
+                id="student-freq"
+                name="freqSemanal"
+                min="0"
+                max="7"
+              />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="student-due">Vencimento</label>
+              <input type="date" id="student-due" name="vencimento" />
+            </div>
+            <div class="form-group checkbox-group">
+              <label for="student-active">
+                <input
+                  type="checkbox"
+                  id="student-active"
+                  name="ativo"
+                  checked
+                />
+                Ativo
+              </label>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn-cancel">Cancelar</button>
+            <button type="submit" class="btn-submit">Adicionar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="container filters-section">
+      <div class="filter-group">
+        <label for="filter-plan">Filtrar por Plano:</label>
+        <select id="filter-plan">
+          <option value="">Todos</option>
+          <option value="Mensal">Mensal</option>
+          <option value="Trimestral">Trimestral</option>
+          <option value="Semestral">Semestral</option>
+          <option value="Anual">Anual</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="filter-active">Status:</label>
+        <select id="filter-active">
+          <option value="">Todos</option>
+          <option value="true">Ativos</option>
+          <option value="false">Inativos</option>
+        </select>
+      </div>
     </div>
 
     <main class="main-content">
+      <div id="students-list" class="students-grid">
+        <!-- Students will be rendered here -->
+      </div>
     </main>
 
+    <script src="env.js"></script>
     <script src="script.js"></script>
-</body>
+  </body>
 </html>

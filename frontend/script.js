@@ -1,43 +1,169 @@
-const btnAddStudent = document.querySelector('.btn-add-student');
-const modal = document.getElementById('modal-add-student');
-const closeBtn = document.querySelector('.btn-close-modal');
-const btnCancel = document.querySelector('.btn-cancel');
-const form = document.getElementById('form-add-student');
+const API_URL = window.env.API_URL || "http://localhost:3000/alunos";
+
+const btnAddStudent = document.querySelector(".btn-add-student");
+const modal = document.getElementById("modal-add-student");
+const closeBtn = document.querySelector(".btn-close-modal");
+const btnCancel = document.querySelector(".btn-cancel");
+const form = document.getElementById("form-add-student");
+const studentsList = document.getElementById("students-list");
+const filterPlan = document.getElementById("filter-plan");
+const filterActive = document.getElementById("filter-active");
 
 function openModal() {
-    modal.classList.add('active');
+  modal.classList.add("active");
 }
 
 function closeModal() {
-    modal.classList.remove('active');
+  modal.classList.remove("active");
+  form.reset();
 }
 
-btnAddStudent.addEventListener('click', openModal);
-closeBtn.addEventListener('click', closeModal);
-btnCancel.addEventListener('click', closeModal);
+btnAddStudent.addEventListener("click", openModal);
+closeBtn.addEventListener("click", closeModal);
+btnCancel.addEventListener("click", closeModal);
 
-modal.addEventListener('click', (e) => {
-    if (e.target === modal) {
-        closeModal();
-    }
-});
-
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal.classList.contains('active')) {
-        closeModal();
-    }
-});
-
-form.addEventListener('submit', (e) => {
-    e.preventDefault(); 
-    const formData = new FormData(form);
-    const data = {
-        name: formData.get('name'),
-        phone: formData.get('phone')
-    };
-    
-    console.log('Dados do aluno:', data);
-    
-    form.reset();
+modal.addEventListener("click", (e) => {
+  if (e.target === modal) {
     closeModal();
+  }
 });
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && modal.classList.contains("active")) {
+    closeModal();
+  }
+});
+
+async function fetchStudents() {
+  try {
+    const plan = filterPlan.value;
+    const active = filterActive.value;
+
+    const params = new URLSearchParams();
+    if (plan) params.append("plano", plan);
+    if (active) params.append("ativo", active);
+
+    const response = await fetch(`${API_URL}?${params.toString()}`);
+    if (!response.ok) throw new Error("Erro ao buscar alunos");
+
+    const students = await response.json();
+    renderStudents(students);
+  } catch (error) {
+    console.error("Erro:", error);
+    alert("Erro ao carregar lista de alunos");
+  }
+}
+
+function renderStudents(students) {
+  studentsList.innerHTML = "";
+
+  if (students.length === 0) {
+    studentsList.innerHTML =
+      '<p style="grid-column: 1/-1; text-align: center; color: #666;">Nenhum aluno encontrado.</p>';
+    return;
+  }
+
+  students.forEach((student) => {
+    const card = document.createElement("div");
+    card.className = `student-card ${student.ativo ? "active" : "inactive"}`;
+
+    const vencimento = new Date(student.vencimento).toLocaleDateString("pt-BR");
+
+    card.innerHTML = `
+            <div class="student-header">
+                <div>
+                    <h3 class="student-name">${student.nome}</h3>
+                    <span class="student-plan">${student.plano}</span>
+                </div>
+            </div>
+            <div class="student-details">
+                <div class="detail-item">
+                    <strong>Objetivo:</strong><br> ${student.objetivo || "-"}
+                </div>
+                <div class="detail-item">
+                    <strong>IMC:</strong><br> ${student.imc || "-"}
+                </div>
+                <div class="detail-item">
+                    <strong>Freq. Semanal:</strong><br> ${student.freqSemanal}x
+                </div>
+                <div class="detail-item">
+                    <strong>Vencimento:</strong><br> ${vencimento}
+                </div>
+            </div>
+            <div class="student-actions">
+                <button class="btn-delete" onclick="deleteStudent('${
+                  student.id
+                }')">
+                    Excluir
+                </button>
+            </div>
+        `;
+
+    studentsList.appendChild(card);
+  });
+}
+
+async function createStudent(studentData) {
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(studentData),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Erro ao criar aluno");
+    }
+
+    closeModal();
+    fetchStudents(); // Refresh list
+    alert("Aluno cadastrado com sucesso!");
+  } catch (error) {
+    console.error("Erro:", error);
+    alert(error.message);
+  }
+}
+
+async function deleteStudent(id) {
+  if (!confirm("Tem certeza que deseja excluir este aluno?")) return;
+
+  try {
+    const response = await fetch(`${API_URL}/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) throw new Error("Erro ao excluir aluno");
+
+    fetchStudents(); // Refresh list
+  } catch (error) {
+    console.error("Erro:", error);
+    alert("Erro ao excluir aluno");
+  }
+}
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const formData = new FormData(form);
+
+  const data = {
+    nome: formData.get("name"),
+    plano: formData.get("plano"),
+    objetivo: formData.get("objetivo"),
+    imc: parseFloat(formData.get("imc")) || null,
+    freqSemanal: parseInt(formData.get("freqSemanal")) || 0,
+    vencimento: formData.get("vencimento"),
+    ativo: formData.get("ativo") === "on",
+  };
+
+  createStudent(data);
+});
+
+filterPlan.addEventListener("change", fetchStudents);
+filterActive.addEventListener("change", fetchStudents);
+
+fetchStudents();
+
+window.deleteStudent = deleteStudent;
