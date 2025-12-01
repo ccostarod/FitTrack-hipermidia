@@ -2,6 +2,7 @@ const API_URL = window.env.API_URL || "http://localhost:3000/alunos";
 
 const btnAddStudent = document.querySelector(".btn-add-student");
 const modal = document.getElementById("modal-add-student");
+const modalTitle = document.getElementById("modal-title");
 const closeBtn = document.querySelector(".btn-close-modal");
 const btnCancel = document.querySelector(".btn-cancel");
 const form = document.getElementById("form-add-student");
@@ -9,16 +10,44 @@ const studentsList = document.getElementById("students-list");
 const filterPlan = document.getElementById("filter-plan");
 const filterActive = document.getElementById("filter-active");
 
+let isEditMode = false;
+let currentStudentId = null;
+
 function openModal() {
+  isEditMode = false;
+  currentStudentId = null;
+  modalTitle.textContent = "Adicionar Novo Aluno";
+  modal.classList.add("active");
+}
+
+function openModalForEdit(student) {
+  isEditMode = true;
+  currentStudentId = student.id;
+  modalTitle.textContent = "Editar Aluno";
+
+  document.getElementById("student-id").value = student.id;
+  document.getElementById("student-name").value = student.nome;
+  document.getElementById("student-plan").value = student.plano;
+  document.getElementById("student-objective").value = student.objetivo || "";
+  document.getElementById("student-imc").value = student.imc || "";
+  document.getElementById("student-freq").value = student.freqSemanal || "";
+  document.getElementById("student-due").value = student.vencimento || "";
+  document.getElementById("student-active").checked = student.ativo;
+
   modal.classList.add("active");
 }
 
 function closeModal() {
   modal.classList.remove("active");
   form.reset();
+  isEditMode = false;
+  currentStudentId = null;
 }
 
-btnAddStudent.addEventListener("click", openModal);
+btnAddStudent.addEventListener("click", () => {
+  form.reset();
+  openModal();
+});
 closeBtn.addEventListener("click", closeModal);
 btnCancel.addEventListener("click", closeModal);
 
@@ -91,13 +120,21 @@ function renderStudents(students) {
                 </div>
             </div>
             <div class="student-actions">
-                <button class="btn-delete" onclick="deleteStudent('${
-                  student.id
-                }')">
+                <button class="btn-edit" data-student-id="${student.id}">
+                    Editar
+                </button>
+                <button class="btn-delete" data-student-id="${student.id}">
                     Excluir
                 </button>
             </div>
         `;
+
+    // Add event listeners
+    const editBtn = card.querySelector(".btn-edit");
+    const deleteBtn = card.querySelector(".btn-delete");
+
+    editBtn.addEventListener("click", () => openModalForEdit(student));
+    deleteBtn.addEventListener("click", () => deleteStudent(student.id));
 
     studentsList.appendChild(card);
   });
@@ -121,6 +158,30 @@ async function createStudent(studentData) {
     closeModal();
     fetchStudents(); // Refresh list
     alert("Aluno cadastrado com sucesso!");
+  } catch (error) {
+    console.error("Erro:", error);
+    alert(error.message);
+  }
+}
+
+async function updateStudent(id, studentData) {
+  try {
+    const response = await fetch(`${API_URL}/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(studentData),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || "Erro ao atualizar aluno");
+    }
+
+    closeModal();
+    fetchStudents(); // Refresh list
+    alert("Aluno atualizado com sucesso!");
   } catch (error) {
     console.error("Erro:", error);
     alert(error.message);
@@ -158,12 +219,14 @@ form.addEventListener("submit", (e) => {
     ativo: formData.get("ativo") === "on",
   };
 
-  createStudent(data);
+  if (isEditMode && currentStudentId) {
+    updateStudent(currentStudentId, data);
+  } else {
+    createStudent(data);
+  }
 });
 
 filterPlan.addEventListener("change", fetchStudents);
 filterActive.addEventListener("change", fetchStudents);
 
 fetchStudents();
-
-window.deleteStudent = deleteStudent;
