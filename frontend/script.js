@@ -154,7 +154,9 @@ function renderStudents(students) {
     const card = document.createElement("div");
     card.className = `student-card ${student.ativo ? "active" : "inactive"}`;
 
-    const vencimento = new Date(student.vencimento).toLocaleDateString("pt-BR");
+    const vencimento = student.vencimento
+      ? new Date(student.vencimento).toLocaleDateString("pt-BR")
+      : "Data não informada";
 
     card.innerHTML = `
             <div class="student-header">
