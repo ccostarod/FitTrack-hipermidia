@@ -65,6 +65,48 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
+const studentNameInput = document.getElementById("student-name");
+const studentImcInput = document.getElementById("student-imc");
+const studentFreqInput = document.getElementById("student-freq");
+
+studentNameInput.addEventListener("invalid", (e) => {
+  e.target.setCustomValidity("Por favor, preencha o nome completo do aluno");
+});
+
+studentNameInput.addEventListener("input", (e) => {
+  e.target.setCustomValidity("");
+});
+
+studentImcInput.addEventListener("invalid", (e) => {
+  const value = parseFloat(e.target.value);
+  if (value && value < 10) {
+    e.target.setCustomValidity("O IMC deve ser maior ou igual a 10");
+  } else {
+    e.target.setCustomValidity("");
+  }
+});
+
+studentImcInput.addEventListener("input", (e) => {
+  e.target.setCustomValidity("");
+});
+
+studentFreqInput.addEventListener("invalid", (e) => {
+  const value = parseInt(e.target.value);
+  if (value < 0) {
+    e.target.setCustomValidity("A frequência semanal não pode ser negativa");
+  } else if (value > 7) {
+    e.target.setCustomValidity(
+      "A frequência semanal não pode ser maior que 7 dias"
+    );
+  } else {
+    e.target.setCustomValidity("");
+  }
+});
+
+studentFreqInput.addEventListener("input", (e) => {
+  e.target.setCustomValidity("");
+});
+
 async function fetchStudents() {
   try {
     const plan = filterPlan.value;
@@ -91,7 +133,7 @@ function filterAndRenderStudents() {
   let filtered = allStudents;
 
   if (searchTerm) {
-    filtered = filtered.filter(student =>
+    filtered = filtered.filter((student) =>
       student.nome.toLowerCase().includes(searchTerm)
     );
   }
@@ -145,7 +187,6 @@ function renderStudents(students) {
             </div>
         `;
 
-    // Add event listeners
     const editBtn = card.querySelector(".btn-edit");
     const deleteBtn = card.querySelector(".btn-delete");
 
@@ -172,7 +213,7 @@ async function createStudent(studentData) {
     }
 
     closeModal();
-    fetchStudents(); // Refresh list
+    fetchStudents();
     alert("Aluno cadastrado com sucesso!");
   } catch (error) {
     console.error("Erro:", error);
@@ -196,7 +237,7 @@ async function updateStudent(id, studentData) {
     }
 
     closeModal();
-    fetchStudents(); // Refresh list
+    fetchStudents();
     alert("Aluno atualizado com sucesso!");
   } catch (error) {
     console.error("Erro:", error);
@@ -214,7 +255,7 @@ async function deleteStudent(id) {
 
     if (!response.ok) throw new Error("Erro ao excluir aluno");
 
-    fetchStudents(); // Refresh list
+    fetchStudents();
   } catch (error) {
     console.error("Erro:", error);
     alert("Erro ao excluir aluno");
@@ -244,6 +285,15 @@ form.addEventListener("submit", (e) => {
 
 filterPlan.addEventListener("change", fetchStudents);
 filterActive.addEventListener("change", fetchStudents);
+
+const btnClearFilters = document.getElementById("btn-clear-filters");
+btnClearFilters.addEventListener("click", () => {
+  filterPlan.value = "";
+  filterActive.value = "";
+  searchInput.value = "";
+  fetchStudents();
+});
+
 searchInput.addEventListener("input", filterAndRenderStudents);
 
 fetchStudents();

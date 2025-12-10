@@ -470,6 +470,25 @@ body {
   color: #333;
 }
 
+.btn-clear-filters {
+  padding: 0.5rem 1rem;
+  background-color: #ecf0f1;
+  color: #2c3e50;
+  border: 1px solid #bdc3c7;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  align-self: flex-end;
+}
+
+.btn-clear-filters:hover {
+  background-color: #d5dbdb;
+  border-color: #95a5a6;
+  transform: translateY(-1px);
+}
+
 .students-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

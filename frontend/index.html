@@ -99,7 +99,11 @@
 
     <div class="container filters-wrapper">
       <div class="search-bar">
-        <input type="text" id="search-input" placeholder="Buscar aluno por nome..." />
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Buscar aluno por nome..."
+        />
       </div>
 
       <div class="filters-section">
@@ -113,7 +117,7 @@
             <option value="Anual">Anual</option>
           </select>
         </div>
-        
+
         <div class="filter-group">
           <label for="filter-active">Status:</label>
           <select id="filter-active">
@@ -121,6 +125,12 @@
             <option value="true">Ativos</option>
             <option value="false">Inativos</option>
           </select>
+        </div>
+
+        <div class="filter-group">
+          <button id="btn-clear-filters" class="btn-clear-filters">
+            Limpar Filtros
+          </button>
         </div>
       </div>
     </div>
