@@ -44,8 +44,33 @@
             </div>
             <div class="form-group">
               <label for="student-objective">Objetivo</label>
-              <input type="text" id="student-objective" name="objetivo" />
+              <select id="student-objective" name="objetivo" multiple>
+                <option value="Hipertrofia">Hipertrofia</option>
+                <option value="Emagrecimento">Emagrecimento</option>
+                <option value="Condicionamento Físico">
+                  Condicionamento Físico
+                </option>
+                <option value="Saúde e Bem-estar">Saúde e Bem-estar</option>
+                <option value="Ganho de Força">Ganho de Força</option>
+                <option value="Definição Muscular">Definição Muscular</option>
+                <option value="Flexibilidade">Flexibilidade</option>
+                <option value="Reabilitação">Reabilitação</option>
+                <option value="Outro">Outro (digitar meu objetivo)</option>
+              </select>
+              <small class="hint-text"
+                >Segure Shift para selecionar múltiplos</small
+              >
             </div>
+          </div>
+
+          <div class="form-group hidden" id="custom-objective-group">
+            <label for="student-custom-objective">Objetivo Personalizado</label>
+            <input
+              type="text"
+              id="student-custom-objective"
+              name="objetivoPersonalizado"
+              placeholder="Digite seu objetivo específico..."
+            />
           </div>
 
           <div class="form-row">

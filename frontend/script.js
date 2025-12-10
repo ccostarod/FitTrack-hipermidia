@@ -10,17 +10,48 @@ const studentsList = document.getElementById("students-list");
 const filterPlan = document.getElementById("filter-plan");
 const filterActive = document.getElementById("filter-active");
 const searchInput = document.getElementById("search-input");
+const objectiveSelect = document.getElementById("student-objective");
+const customObjectiveGroup = document.getElementById("custom-objective-group");
+const customObjectiveInput = document.getElementById(
+  "student-custom-objective"
+);
 
 let isEditMode = false;
 let currentStudentId = null;
 let allStudents = [];
 
+function toggleCustomObjectiveField() {
+  const selectedValues = Array.from(objectiveSelect.selectedOptions).map(
+    (option) => option.value
+  );
+  if (selectedValues.includes("Outro")) {
+    customObjectiveGroup.classList.remove("hidden");
+  } else {
+    customObjectiveGroup.classList.add("hidden");
+    customObjectiveInput.value = "";
+  }
+}
+
+objectiveSelect.addEventListener("change", toggleCustomObjectiveField);
+
 function openModal() {
   isEditMode = false;
   currentStudentId = null;
   modalTitle.textContent = "Adicionar Novo Aluno";
+  customObjectiveGroup.classList.add("hidden");
   modal.classList.add("active");
 }
+
+const PREDEFINED_OBJECTIVES = [
+  "Hipertrofia",
+  "Emagrecimento",
+  "Condicionamento Físico",
+  "Saúde e Bem-estar",
+  "Ganho de Força",
+  "Definição Muscular",
+  "Flexibilidade",
+  "Reabilitação",
+];
 
 function openModalForEdit(student) {
   isEditMode = true;
@@ -30,11 +61,37 @@ function openModalForEdit(student) {
   document.getElementById("student-id").value = student.id;
   document.getElementById("student-name").value = student.nome;
   document.getElementById("student-plan").value = student.plano;
-  document.getElementById("student-objective").value = student.objetivo || "";
   document.getElementById("student-imc").value = student.imc || "";
   document.getElementById("student-freq").value = student.freqSemanal || "";
   document.getElementById("student-due").value = student.vencimento || "";
   document.getElementById("student-active").checked = student.ativo;
+
+  const objectives = student.objetivo ? student.objetivo.split(", ") : [];
+  const predefinedSelected = [];
+  const customObjectives = [];
+
+  objectives.forEach((obj) => {
+    if (PREDEFINED_OBJECTIVES.includes(obj)) {
+      predefinedSelected.push(obj);
+    } else if (obj.trim()) {
+      customObjectives.push(obj);
+    }
+  });
+
+  Array.from(objectiveSelect.options).forEach((option) => {
+    if (option.value === "Outro") {
+      option.selected = customObjectives.length > 0;
+    } else {
+      option.selected = predefinedSelected.includes(option.value);
+    }
+  });
+
+  customObjectiveInput.value = customObjectives.join(", ");
+  if (customObjectives.length > 0) {
+    customObjectiveGroup.classList.remove("hidden");
+  } else {
+    customObjectiveGroup.classList.add("hidden");
+  }
 
   modal.classList.add("active");
 }
@@ -42,6 +99,7 @@ function openModalForEdit(student) {
 function closeModal() {
   modal.classList.remove("active");
   form.reset();
+  customObjectiveGroup.classList.add("hidden");
   isEditMode = false;
   currentStudentId = null;
 }
@@ -262,6 +320,20 @@ async function deleteStudent(id) {
   }
 }
 
+function getSelectedObjectives() {
+  const selectedOptions = Array.from(objectiveSelect.selectedOptions)
+    .map((option) => option.value)
+    .filter((value) => value !== "Outro");
+  const customObjective = customObjectiveInput.value.trim();
+
+  const allObjectives = [...selectedOptions];
+  if (customObjective) {
+    allObjectives.push(customObjective);
+  }
+
+  return allObjectives.join(", ");
+}
+
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   const formData = new FormData(form);
@@ -269,7 +341,7 @@ form.addEventListener("submit", (e) => {
   const data = {
     nome: formData.get("name"),
     plano: formData.get("plano"),
-    objetivo: formData.get("objetivo"),
+    objetivo: getSelectedObjectives(),
     imc: parseFloat(formData.get("imc")) || null,
     freqSemanal: parseInt(formData.get("freqSemanal")) || 0,
     vencimento: formData.get("vencimento"),
