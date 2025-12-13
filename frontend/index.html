@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <!-- Header com o logo e botão de adicionar aluno -->
     <header class="header">
       <div class="container">
         <div class="logo">
@@ -18,6 +19,7 @@
       </div>
     </header>
 
+    <!-- Modal de adicionar/editar aluno, fica escondido até clicar no botão, e usamos o mesmo modal para ambos os casos (create e update) para não repetir código -->
     <div id="modal-add-student" class="modal">
       <div class="modal-content">
         <div class="modal-header">
@@ -25,13 +27,16 @@
           <button class="btn-close-modal">&times;</button>
         </div>
 
+        <!-- Formulário de cadastro/edição do aluno -->
         <form id="form-add-student" class="modal-form">
+          <!-- Campo hidden pra guardar o ID quando tiver editando -->
           <input type="hidden" id="student-id" name="id" />
           <div class="form-group">
             <label for="student-name">Nome Completo</label>
             <input type="text" id="student-name" name="name" required />
           </div>
 
+          <!-- Usamos form-row pra colocar dois campos lado a lado -->
           <div class="form-row">
             <div class="form-group">
               <label for="student-plan">Plano</label>
@@ -97,6 +102,7 @@
       </div>
     </div>
 
+    <!-- Seção de filtros - a gente colocou busca por nome (adição fora o que foi pedido no site), filtro por plano e por status -->
     <div class="container filters-wrapper">
       <div class="search-bar">
         <input
@@ -135,12 +141,14 @@
       </div>
     </div>
 
+    <!-- Área principal onde os cards dos alunos vão aparecer -->
     <main class="main-content">
       <div id="students-list" class="students-grid">
-        <!-- Students will be rendered here -->
+        <!-- Os cards dos alunos são renderizados aqui pelo JavaScript -->
       </div>
     </main>
 
+    <!-- Carrega primeiro o env.js pra ter a URL da API disponível -->
     <script src="env.js"></script>
     <script src="script.js"></script>
   </body>

@@ -1,3 +1,12 @@
+/*
+=============================================
+FitTrack - Estilos do Frontend
+Desenvolvido por nós dois
+A gente tentou deixar o mais bonito possível kkk
+=============================================
+*/
+
+/* Reset básico pra tirar margens e paddings padrão do navegador */
 * {
   margin: 0;
   padding: 0;
@@ -11,10 +20,13 @@ body {
   color: #333;
 }
 
+/* =============================================
+   Header - Barra superior com logo e botão
+   ============================================= */
 .header {
   background-color: #ffffff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  position: sticky;
+  position: sticky; /* Fica fixo no topo quando scrolla */
   top: 0;
   z-index: 1000;
 }
@@ -35,6 +47,7 @@ body {
   letter-spacing: -0.5px;
 }
 
+/* Botão de adicionar aluno - usamos verde pra destacar */
 .btn-add-student {
   background-color: #27ae60;
   color: white;
@@ -50,7 +63,7 @@ body {
 
 .btn-add-student:hover {
   background-color: #229954;
-  transform: translateY(-2px);
+  transform: translateY(-2px); /* Efeito de "levitar" no hover */
   box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3);
 }
 
@@ -65,7 +78,10 @@ body {
   padding: 0 2rem;
 }
 
-/* Parte do Modal de Adicionar Aluno */
+/* =============================================
+   Modal de Adicionar/Editar Aluno
+   A gente usou animações pra ficar mais suave
+   ============================================= */
 .modal {
   display: none;
   position: fixed;
@@ -74,7 +90,7 @@ body {
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro semi-transparente */
   animation: fadeIn 0.3s ease;
 }
 
@@ -84,6 +100,7 @@ body {
   align-items: center;
 }
 
+/* Animação de fade in pro modal */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -102,6 +119,7 @@ body {
   animation: slideDown 0.3s ease;
 }
 
+/* Animação do modal descendo */
 @keyframes slideDown {
   from {
     transform: translateY(-50px);
@@ -126,6 +144,7 @@ body {
   color: #2c3e50;
 }
 
+/* Botão de fechar o modal (o X) */
 .btn-close-modal {
   background: #f8f9fa;
   border: none;
@@ -151,6 +170,9 @@ body {
   padding: 1.5rem;
 }
 
+/* =============================================
+   Estilos do Formulário
+   ============================================= */
 .form-group {
   margin-bottom: 1.2rem;
 }
@@ -177,6 +199,7 @@ body {
   box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
 }
 
+/* Estilo do select customizado */
 .form-group select {
   width: 100%;
   padding: 0.75rem;
@@ -187,7 +210,8 @@ body {
   color: #333;
   cursor: pointer;
   transition: border-color 0.3s, box-shadow 0.3s;
-  appearance: none;
+  appearance: none; /* Remove o estilo padrão do navegador */
+  /* Seta customizada usando SVG inline - achamos mais bonito assim */
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%232c3e50' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
@@ -243,6 +267,7 @@ body {
   background-color: #229954;
 }
 
+/* Aqui é feito o estilo da seção de filtros, com a busca por nome, filtro por plano e por status */
 .filters-wrapper {
   margin-top: 2rem;
   display: block;
@@ -293,6 +318,7 @@ body {
   transform: translateY(-1px);
 }
 
+/* Grid de Cards dos Alunos, usamos CSS Grid pra ficar responsivo automaticamente */
 .students-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -300,13 +326,14 @@ body {
   margin-top: 1rem;
 }
 
+/* Card individual do aluno */
 .student-card {
   background: white;
   border-radius: 8px;
   padding: 1.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   transition: transform 0.2s, box-shadow 0.2s;
-  border-left: 4px solid transparent;
+  border-left: 4px solid transparent; /* Borda colorida na esquerda */
 }
 
 .student-card:hover {
@@ -314,10 +341,12 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Card de aluno ativo - borda verde */
 .student-card.active {
   border-left-color: #27ae60;
 }
 
+/* Card de aluno inativo, nesse caso a borda é vermelha e também a opacidade reduzida */
 .student-card.inactive {
   border-left-color: #e74c3c;
   opacity: 0.8;
@@ -346,6 +375,7 @@ body {
   display: inline-block;
 }
 
+/* Grid pros detalhes do aluno em 2 colunas */
 .student-details {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -367,6 +397,7 @@ body {
   padding-top: 1rem;
 }
 
+/* Botões de editar e excluir */
 .btn-edit,
 .btn-delete {
   background: none;
@@ -397,6 +428,7 @@ body {
   transform: translateY(-1px);
 }
 
+/* Aqui temos o layout de linhas do formulário */
 .form-row {
   display: flex;
   gap: 1rem;
@@ -406,6 +438,7 @@ body {
   flex: 1;
 }
 
+/* Estilo especial pro checkbox */
 .checkbox-group {
   display: flex;
   align-items: center;
@@ -425,12 +458,14 @@ body {
   margin: 0;
 }
 
+/* Barra de busca, adicionamos um ícone de lupa usando SVG */
 .search-bar {
   position: relative;
   display: flex;
   align-items: center;
 }
 
+/* Ícone de lupa antes do input */
 .search-bar::before {
   content: "";
   position: absolute;
@@ -446,7 +481,7 @@ body {
 
 .search-bar input {
   width: 100%;
-  padding: 0.875rem 1rem 0.875rem 3rem;
+  padding: 0.875rem 1rem 0.875rem 3rem; /* Padding maior na esquerda por causa do ícone */
   border: 2px solid #e0e0e0;
   border-radius: 8px;
   font-size: 1rem;
